@@ -177,14 +177,16 @@ async function main() {
   console.log(`Liqor Public Key: ${liqorMangoAccount.publicKey.toBase58()}`);
 
   perpMarkets = await Promise.all(
-    groupIds.perpMarkets.map((perpMarket) => {
-      return mangoGroup.loadPerpMarket(
-        connection,
-        perpMarket.marketIndex,
-        perpMarket.baseDecimals,
-        perpMarket.quoteDecimals,
-      );
-    }),
+    groupIds.perpMarkets
+      .filter((m) => m.baseSymbol !== 'LUNA')
+      .map((perpMarket) => {
+        return mangoGroup.loadPerpMarket(
+          connection,
+          perpMarket.marketIndex,
+          perpMarket.baseDecimals,
+          perpMarket.quoteDecimals,
+        );
+      }),
   );
   spotMarkets = await Promise.all(
     groupIds.spotMarkets.map((spotMarket) => {
